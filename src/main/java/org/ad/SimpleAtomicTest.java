@@ -35,16 +35,20 @@ import org.openjdk.jcstress.infra.results.II_Result;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-// See jcstress-samples or existing tests for API introduction and testing guidelines
-
+/**
+ *   Observed state   Occurrences              Expectation  Interpretation
+ *             1, 1             0                FORBIDDEN  AtomicInteger must prohibit this case (volatile int + Uns...
+ *             1, 2    50,609,081   ACCEPTABLE_INTERESTING  OK
+ *             2, 1    22,956,540   ACCEPTABLE_INTERESTING  OK
+ *             2, 2             0                FORBIDDEN  AtomicInteger must prohibit this case (volatile int + Uns...
+ */
 @JCStressTest
-// Outline the outcomes here. The default outcome is provided, you need to remove it:
-@Outcome(id = "1, 1", expect = Expect.ACCEPTABLE_INTERESTING, desc = "Hmm")
-@Outcome(id = "1, 2", expect = Expect.ACCEPTABLE_INTERESTING, desc = "Happens")
-@Outcome(id = "2, 1", expect = Expect.ACCEPTABLE_INTERESTING, desc = "Happens")
-@Outcome(id = "2, 2", expect = Expect.ACCEPTABLE_INTERESTING, desc = "Hmm")
+@Outcome(id = "1, 1", expect = Expect.FORBIDDEN, desc = "AtomicInteger must prohibit this case (volatile int + Unsafe.GAA())")
+@Outcome(id = "1, 2", expect = Expect.ACCEPTABLE, desc = "OK")
+@Outcome(id = "2, 1", expect = Expect.ACCEPTABLE, desc = "OK")
+@Outcome(id = "2, 2", expect = Expect.FORBIDDEN, desc = "AtomicInteger must prohibit this case (volatile int + Unsafe.GAA())")
 @State
-public class ConcurrencyTest {
+public class SimpleAtomicTest {
     AtomicInteger x = new AtomicInteger(0);
     @Actor
     public void actor1(II_Result r) {
