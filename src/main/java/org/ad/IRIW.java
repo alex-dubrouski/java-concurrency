@@ -55,7 +55,7 @@ import org.openjdk.jcstress.infra.results.IIII_Result;
 @State
 @Outcome(expect = Expect.ACCEPTABLE, desc = "Any reordering or cache coherence effects are possible")
 public class IRIW {
-    volatile int x, y;
+    int x, y;
 
     @Actor
     public void actor1() {
