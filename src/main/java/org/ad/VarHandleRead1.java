@@ -34,7 +34,7 @@ public class VarHandleRead1 {
 
   @Actor
   public void actor2(II_Result r) {
-    int l = (int)VH.get(this);
+    final int l = (int)VH.get(this);
     if (l == 1) {
       r.r1 = dinner;
       r.r2 = l;
