@@ -16,13 +16,13 @@ import org.openjdk.jcstress.infra.results.II_Result;
 public class VarHandleRead1 {
   volatile int ready;
   int dinner;
-  static VarHandle VH;
+  static final VarHandle VH;
 
   static {
     try {
       VH = MethodHandles.lookup().in(VarHandleRead1.class).findVarHandle(VarHandleRead1.class, "ready", int.class);
     } catch (IllegalAccessException | NoSuchFieldException var1) {
-      var1.printStackTrace();
+      throw new AssertionError(var1);
     }
   }
 
@@ -34,13 +34,12 @@ public class VarHandleRead1 {
 
   @Actor
   public void actor2(II_Result r) {
-    final int l = (int)VH.get(this);
-    if (l == 1) {
+    final int t = (int)VH.get(this);
+    if (t == 1) {
       r.r1 = dinner;
-      r.r2 = l;
     } else {
-      r.r1 = dinner;
-      r.r2 = l;
+      r.r1 = -1;
     }
+    r.r2 = t;
   }
 }

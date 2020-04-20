@@ -16,13 +16,13 @@ import org.openjdk.jcstress.infra.results.II_Result;
 public class VarHandleRead2 {
   volatile int ready;
   int dinner;
-  static VarHandle VH;
+  final static VarHandle VH;
 
   static {
     try {
-      VH = MethodHandles.lookup().in(VarHandleRead2.class).findVarHandle(VarHandleRead2.class, "ready", int.class);
+      VH = MethodHandles.lookup().findVarHandle(VarHandleRead2.class, "ready", int.class);
     } catch (IllegalAccessException | NoSuchFieldException var1) {
-      var1.printStackTrace();
+      throw new AssertionError(var1);
     }
   }
 
